@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política Pública de Participación Ciudadana - Instituciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .presentation-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .slide-counter {
+            background: #64748b;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Slide Container */
+        .slides-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+
+        /* Slide Content */
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .slide-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        /* Card Layouts */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .card-content {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Process Steps */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .step {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step.current {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: 600;
+        }
+
+        .step.current .step-number {
+            background: #1d4ed8;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        /* QR Section */
+        .qr-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .nav-btn:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-btn:disabled:hover {
+            background: white;
+            color: #64748b;
+            border-color: #e2e8f0;
+        }
+
+        /* Slide Indicators */
+        .slide-indicators {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: #3b82f6;
+            transform: scale(1.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide-title {
+                font-size: 2rem;
+            }
+            
+            .cards-grid,
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .slide {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 0.75rem 1rem;
+            }
+            
+            .logo {
+                height: 40px;
+            }
+        }
+
+        /* List Styles */
+        .feature-list {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feature-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Header -->
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <img src="logo_alcaldia_pereira.png" alt="Alcaldía de Pereira" class="logo">
+                <img src="logo_pereira_participa.png" alt="Pereira Participa" class="logo">
+            </div>
+            <div class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">6</span>
+            </div>
+        </div>
+
+        <!-- Slides -->
+        <div class="slides-wrapper">
+            <!-- Slide 1: Introducción -->
+            <div class="slide active" data-slide="1">
+                <div class="slide-content">
+                    <h1 class="slide-title">Política Pública de Participación Ciudadana</h1>
+                    <p class="slide-subtitle">Construcción participativa para instituciones de Pereira</p>
+                    
+                    <div class="highlight-box">
+                        <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">🏛️ Instituciones como actores clave</h2>
+                        <p style="font-size: 1.1rem; opacity: 0.9;">
+                            Su experiencia institucional es fundamental para fortalecer 
+                            la participación ciudadana en nuestra ciudad
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Marco Normativo -->
+            <div class="slide" data-slide="2">
+                <div class="slide-content">
+                    <h1 class="slide-title">Marco Normativo</h1>
+                    <p class="slide-subtitle">Fundamentos legales que respaldan la participación ciudadana</p>
+                    
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-icon">📜</div>
+                            <h3 class="card-title">Constitución Política 1991</h3>
+                            <div class="card-content">
+                                <ul class="feature-list">
+                                    <li><span class="feature-icon">⚖️</span> Estado democrático y participativo</li>
+                                    <li><span class="feature-icon">👥</span> Participación en decisiones que nos afectan</li>
+                                    <li><span class="feature-icon">🤝</span> Promoción de organizaciones comunitarias</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon">📋</div>
+                            <h3 class="card-title">Ley 1757 de 2015</h3>
+                            <div class="card-content">
+                                <ul class="feature-list">
+                                    <li><span class="feature-icon">🎯</span> Estatuto de Participación Ciudadana</li>
+                                    <li><span class="feature-icon">💬</span> Espacios de diálogo obligatorios</li>
+                                    <li><span class="feature-icon">📊</span> Respuesta efectiva a propuestas</li>
+                                    <li><span class="feature-icon">🔍</span> Derecho a la información pública</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Proceso de Construcción -->
+            <div class="slide" data-slide="3">
+                <div class="slide-content">
+                    <h1 class="slide-title">Proceso de Construcción</h1>
+                    <p class="slide-subtitle">6 pasos para una política pública participativa</p>
+                    
+                    <div class="process-steps">
+                        <div class="step current">
+                            <div class="step-number">1</div>
+                            <h3>Diagnóstico</h3>
+                            <p>Recoger experiencias institucionales</p>
+                            <small style="color: #3b82f6; font-weight: 600;">← Estamos aquí</small>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h3>Formulación</h3>
+                            <p>Diseño técnico de estrategias</p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h3>Validación</h3>
+                            <p>Revisión ciudadana del documento</p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <h3>Adopción</h3>
+                            <p>Decreto municipal oficial</p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <h3>Implementación</h3>
+                            <p>Ejecución con presupuesto</p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">6</div>
+                            <h3>Seguimiento</h3>
+                            <p>Evaluación y mejora continua</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Rol Institucional -->
+            <div class="slide" data-slide="4">
+                <div class="slide-content">
+                    <h1 class="slide-title">Su Rol como Instituciones</h1>
+                    <p class="slide-subtitle">Experiencia y conocimiento institucional</p>
+                    
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-icon">🎯</div>
+                            <h3 class="card-title">Lo que ustedes conocen</h3>
+                            <div class="card-content">
+                                <ul class="feature-list">
+                                    <li><span class="feature-icon">✅</span> Mecanismos efectivos de participación</li>
+                                    <li><span class="feature-icon">⚠️</span> Barreras institucionales existentes</li>
+                                    <li><span class="feature-icon">🔄</span> Procesos que funcionan bien</li>
+                                    <li><span class="feature-icon">📈</span> Oportunidades de mejora</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon">🏛️</div>
+                            <h3 class="card-title">Su contribución</h3>
+                            <div class="card-content">
+                                <ul class="feature-list">
+                                    <li><span class="feature-icon">📊</span> Datos sobre participación ciudadana</li>
+                                    <li><span class="feature-icon">💡</span> Propuestas de innovación</li>
+                                    <li><span class="feature-icon">🔗</span> Articulación interinstitucional</li>
+                                    <li><span class="feature-icon">📋</span> Buenas prácticas documentadas</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Dinámica del Taller -->
+            <div class="slide" data-slide="5">
+                <div class="slide-content">
+                    <h1 class="slide-title" style="font-size: 2rem; margin-bottom: 1rem;">Dinámica del Taller</h1>
+                    <p class="slide-subtitle" style="margin-bottom: 1.5rem;">Construcción colectiva por mesas de trabajo</p>
+                    
+                    <!-- Layout optimizado en 3 columnas -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <!-- Trabajo por Mesas -->
+                        <div class="card" style="background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 1.5rem;">
+                            <div style="text-align: center; margin-bottom: 1rem;">
+                                <div style="background: #3b82f6; color: white; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: inline-block; margin-bottom: 0.5rem;">
+                                    25 min
+                                </div>
+                                <h3 style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin: 0;">👥 Trabajo por Mesas</h3>
+                            </div>
+                            <div style="font-size: 0.9rem; color: #64748b;">
+                                <p style="margin-bottom: 0.5rem;">🎯 <strong>Identificación de problemas</strong></p>
+                                <p style="margin-bottom: 0.5rem;">💡 <strong>Propuesta de soluciones</strong></p>
+                                <p style="margin-bottom: 0.5rem;">👨‍🏫 <strong>Facilitadores</strong> por mesa</p>
+                                <p>🤝 <strong>Trabajo colaborativo</strong></p>
+                            </div>
+                        </div>
+
+                        <!-- Sistematización -->
+                        <div class="card" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); padding: 1.5rem;">
+                            <div style="text-align: center; margin-bottom: 1rem;">
+                                <div style="background: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: inline-block; margin-bottom: 0.5rem;">
+                                    25 min
+                                </div>
+                                <h3 style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin: 0;">📋 Plenaria</h3>
+                            </div>
+                            <div style="font-size: 0.9rem; color: #64748b;">
+                                <p style="margin-bottom: 0.5rem;">🗣️ <strong>Socialización</strong> de hallazgos</p>
+                                <p style="margin-bottom: 0.5rem;">📝 <strong>Un relator/a</strong> por mesa</p>
+                                <p style="margin-bottom: 0.5rem;">🔄 <strong>Intercambio</strong> de experiencias</p>
+                                <p>📊 <strong>Síntesis</strong> de resultados</p>
+                            </div>
+                        </div>
+
+                        <!-- Objetivo -->
+                        <div class="card" style="background: linear-gradient(135deg, #faf5ff, #f3e8ff); padding: 1.5rem;">
+                            <div style="text-align: center; margin-bottom: 1rem;">
+                                <div style="background: #7c3aed; color: white; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: inline-block; margin-bottom: 0.5rem;">
+                                    50 min
+                                </div>
+                                <h3 style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin: 0;">🎯 Objetivo</h3>
+                            </div>
+                            <div style="font-size: 0.9rem; color: #64748b;">
+                                <p style="margin-bottom: 0.5rem;">✓ <strong>Barreras actuales</strong></p>
+                                <p style="margin-bottom: 0.5rem;">✓ <strong>Oportunidades</strong> de mejora</p>
+                                <p style="margin-bottom: 0.5rem;">✓ <strong>Soluciones</strong> prácticas</p>
+                                <p>✓ <strong>Articulación</strong> interinstitucional</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cronograma visual compacto -->
+                    <div style="background: linear-gradient(135deg, #1e293b, #334155); color: white; border-radius: 12px; padding: 1.5rem; text-align: center;">
+                        <h4 style="margin-bottom: 1rem; font-size: 1.2rem;">📅 Su conocimiento institucional es clave para esta construcción colectiva</h4>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600;">
+                                👥 Mesa de trabajo
+                            </span>
+                            <span style="color: rgba(255,255,255,0.7);">→</span>
+                            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600;">
+                                📋 Presentación
+                            </span>
+                            <span style="color: rgba(255,255,255,0.7);">→</span>
+                            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600;">
+                                📊 Síntesis
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Formulario de Participación -->
+            <div class="slide" data-slide="6">
+                <div class="slide-content">
+                    <h1 class="slide-title">Su Participación es Clave</h1>
+                    <p class="slide-subtitle">Formulario específico para instituciones</p>
+                    
+                    <div class="qr-section">
+                        <h3 style="margin-bottom: 1.5rem; color: #1e293b;">📋 Formulario Institucional</h3>
+                        
+                        <div class="qr-code">
+                            <img src="PPPC_lar.png" alt="Código QR - Formulario Instituciones">
+                        </div>
+                        
+                        <p style="margin: 1rem 0; color: #64748b;">
+                            <strong>URL directa:</strong><br>
+                            <a href="https://es.surveymonkey.com/r/PPPC1largo" target="_blank" 
+                               style="color: #3b82f6; text-decoration: none; font-weight: 500;">
+                                es.surveymonkey.com/r/PPPC1largo
+                            </a>
+                        </p>
+                        
+                        <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-top: 1.5rem;">
+                            <p style="font-size: 0.9rem; color: #64748b;">
+                                ⏱️ <strong>10 preguntas - 8 minutos</strong><br>
+                                🔒 Sus respuestas son confidenciales<br>
+                                💡 Van directo al equipo técnico
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                        <div class="highlight-box">
+                            <h3 style="margin-bottom: 1rem;">🌟 Su experiencia cuenta</h3>
+                            <p>Sus respuestas se suman a las de otros actores clave para construir 
+                               una política pública integral y efectiva para Pereira</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Agradecimiento -->
+            <div class="slide" data-slide="7">
+                <div class="slide-content">
+                    <h1 class="slide-title">¡Gracias por su participación!</h1>
+                    <p class="slide-subtitle">Construyendo juntos una Pereira más participativa</p>
+                    
+                    <div style="margin: 3rem 0;">
+                        <div class="highlight-box">
+                            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">🏛️ Instituciones comprometidas</h2>
+                            <p style="font-size: 1.1rem; opacity: 0.9; line-height: 1.6;">
+                                Su conocimiento institucional y experiencia en participación ciudadana 
+                                son fundamentales para el fortalecimiento democrático de nuestra ciudad.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="qr-section" style="max-width: 350px;">
+                        <h3 style="margin-bottom: 1rem; color: #1e293b;">📝 Evalúe este taller</h3>
+                        
+                        <div class="qr-code" style="width: 150px; height: 150px;">
+                            <img src="PPPC_evtal.png" alt="Código QR - Evaluación del Taller">
+                        </div>
+                        
+                        <p style="margin: 1rem 0; color: #64748b; font-size: 0.9rem;">
+                            <a href="https://es.surveymonkey.com/r/evtal" target="_blank" 
+                               style="color: #3b82f6; text-decoration: none;">
+                                es.surveymonkey.com/r/evtal
+                            </a>
+                        </p>
+                        
+                        <p style="font-size: 0.8rem; color: #64748b;">
+                            ⏱️ Solo 3 minutos • 🔒 Anónima
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 3rem; color: #64748b;">
+                        <p><strong>Alcaldía de Pereira</strong> • <strong>Pereira Participa</strong></p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">
+                            Política Pública de Participación Ciudadana
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+
+        <!-- Slide Indicators -->
+        <div class="slide-indicators">
+            <div class="indicator active" onclick="goToSlide(1)"></div>
+            <div class="indicator" onclick="goToSlide(2)"></div>
+            <div class="indicator" onclick="goToSlide(3)"></div>
+            <div class="indicator" onclick="goToSlide(4)"></div>
+            <div class="indicator" onclick="goToSlide(5)"></div>
+            <div class="indicator" onclick="goToSlide(6)"></div>
+            <div class="indicator" onclick="goToSlide(7)"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 7;
+
+        function updateSlideCounter() {
+            document.getElementById('current-slide').textContent = currentSlide;
+            document.getElementById('total-slides').textContent = totalSlides;
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+        }
+
+        function updateIndicators() {
+            const indicators = document.querySelectorAll('.indicator');
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index + 1 === currentSlide);
+            });
+        }
+
+        function showSlide(slideNumber) {
+            const slides = document.querySelectorAll('.slide');
+            
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                
+                if (index + 1 === slideNumber) {
+                    slide.classList.add('active');
+                } else if (index + 1 < slideNumber) {
+                    slide.classList.add('prev');
+                }
+            });
+        }
+
+        function changeSlide(direction) {
+            const newSlide = currentSlide + direction;
+            
+            if (newSlide >= 1 && newSlide <= totalSlides) {
+                currentSlide = newSlide;
+                showSlide(currentSlide);
+                updateSlideCounter();
+                updateNavigationButtons();
+                updateIndicators();
+            }
+        }
+
+        function goToSlide(slideNumber) {
+            if (slideNumber >= 1 && slideNumber <= totalSlides) {
+                currentSlide = slideNumber;
+                showSlide(currentSlide);
+                updateSlideCounter();
+                updateNavigationButtons();
+                updateIndicators();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeSlide(1);
+            } else if (e.key >= '1' && e.key <= '7') {
+                goToSlide(parseInt(e.key));
+            }
+        });
+
+        // Initialize
+        updateSlideCounter();
+        updateNavigationButtons();
+        updateIndicators();
+
+        // Animation on load
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.opacity = '1';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
